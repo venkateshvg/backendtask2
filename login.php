@@ -7,6 +7,7 @@ $PWD=$_POST['password'];
 
 $result=$con->query("select * from backend where username='$UN'");
 $row=$result->fetch_array(MYSQLI_BOTH);
+//verifying password
 if(password_verify($PWD,$row['Password'])){
 	
 session_start();
@@ -103,10 +104,6 @@ body{
 	
  
 </style>
-<link href="SpryAssets/SpryValidationTextField.css" rel="stylesheet" type="text/css" />
-<link href="SpryAssets/SpryValidationPassword.css" rel="stylesheet" type="text/css" />
-<script src="SpryAssets/SpryValidationTextField.js" type="text/javascript"></script>
-<script src="SpryAssets/SpryValidationPassword.js" type="text/javascript"></script>
 <head>
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -136,19 +133,19 @@ body{
 	</div>
     <div id="ContentRight">   
       <form id="form" name="form" method="post" action="">
+        
         <?php if(isset($_SESSION["LogInFail"])){ ?>
         <div class="FormElement"> LogIn Failed! Please Check Your Credentials</div>
         <br /><br />
         <?php } ?>
         Username:  
         <label for="Username"></label>
-        <span id="sprytextfield1">
+        <label for="username"></label>
         <input type="text" name="username" id="username" />
-        <span class="textfieldRequiredMsg">A value is required.</span></span>
-        <p>Password:  <span id="sprypassword1">
-          <label for="password"></label>
-          <input type="password" name="password" id="password" />
-          <span class="passwordRequiredMsg">A value is required.</span></span></p>
+<p>Password:  
+  <label for="password"></label>
+  <input type="text" name="password" id="password" />
+</p>
         <p>
           <input type="submit" name="Login" id="Login" value="Login" />
         </p>
@@ -157,9 +154,5 @@ body{
 </div>
 <div id="Footer"></div>
 </div>
-<script type="text/javascript">
-var sprytextfield1 = new Spry.Widget.ValidationTextField("sprytextfield1");
-var sprypassword1 = new Spry.Widget.ValidationPassword("sprypassword1");
-</script>
 </body>
 </html>

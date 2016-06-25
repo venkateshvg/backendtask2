@@ -5,6 +5,7 @@ if(isset($_POST['Add']))
 	 $post=$_POST['Post'];
 	 
 	 $poster=$_SESSION["Username"];
+	 if($post)
 	 $don=$con->query("INSERT INTO Posts(Post,PostedBy) VALUES('{$post}','{$poster}')");
 	  
 	  
@@ -129,33 +130,44 @@ body{
 	  <h2>&nbsp;</h2>
 	</div>
     <div id="ContentRight">
-      <p>Your Id <?php echo $_SESSION["UserID"];   ?>    </p>
-      <p>Your level <?php echo $_SESSION["Userlevel"];   ?>    </p>
-       <p>
-         <?php
+      <p>
+        <?php
 	   //Retrieve all rows from Post table
+	   $ul=0;
 	   $result=$con->query("select * from posts");
+	   $rowcount=mysqli_num_rows($result);
 	   
 	   //Display results as tabulation
+	   if($rowcount==0)
+	   echo "No Posts available";
+	   else{
 	   echo "<table border='1' cellpadding='10'>";
-	   echo "<tr> <th>Post ID</th> <th>Post</th> <th>Posted By</th> </tr>";
+	   echo "<tr> <th>Post </th> <th>Posted By</th> <th>Action</th> </tr>";
 
 	   while ($row=$result->fetch_array(MYSQLI_BOTH) ) 
-	          {    		
+	          {    
+			       
 			       $ul=$_SESSION["Userlevel"];
 	 			   $_SESSION["ID"]=$row['ID'];
 				   echo "<tr>";
-		           echo '<td>' . $row['ID'] . '</td>';
+		           
 				   echo '<td>' . $row['Post'] . '</td>';
 		           echo '<td>' . $row['PostedBy'] . '</td>';
 		           if($ul==3)
-				   echo '<td><a href="delete.php?id=' . $row['ID'] . '">Delete</a></td>';
+				   {
+				  
+				   
+				   echo '<td><a href="delete.php?id=' . $row['ID'] . '"onClick="return confirm(\'Are you sure you want to delete?\');">Delete</a></td>';
+				   
+				   }
+				   
 		           echo "</tr>";
 				 		   
 		      }
 			  echo "</table>";
 	 echo "<br>";
-	 
+	   }
+	            
 	 
 
        ?>
@@ -164,7 +176,7 @@ body{
        <form id="form1" name="form1" method="post" action="">
          <p>
            <label for="Post"></label>
-           <?php if($ul==2){?>
+           <?php if($ul!=1){?>
          Post:
          <input type="text" name="Post" id="Post" />
          <label for="Postedby"></label>
